@@ -3,9 +3,9 @@
     public static class Labels
     {
         public enum LabelNames { None, Printed, Handwritten, Electronic }
-        const string PRINTED = "Печатное издание";
-        const string HANDWRITTEN = "Рукописное издание";
-        const string ELECTRONIC = "Электронное издание";
+        const string PRINTED = "печ.";
+        const string HANDWRITTEN = "рук.";
+        const string ELECTRONIC = "электр.";
 
         public static string ToString(Labels.LabelNames lbl)
         {

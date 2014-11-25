@@ -3,23 +3,25 @@ namespace PaperMgr.Entity
 {
     abstract class JournalPaper : Paper
     {
+        protected JournalPaper()
+        {
+            JournalTitle = "";
+            JournalNumber = 0;
+            Volume = 0;
+            FirstPage = "";
+            LastPage = "";
+            IsInWACList = false;
+            IsInScopus = false;
+            IsInWoS = false;
+        }
         public string JournalTitle{ get; set; }
         public int JournalNumber { get; set; }
         public int Volume { get; set; }
-        protected List<Person> m_VACList = new List<Person>();
+        public string FirstPage { get; set; }
+        public string LastPage { get; set; }
+        public bool IsInWACList { get; set; }
+        public bool IsInScopus { get; set; }
+        public bool IsInWoS { get; set; }
 
-        public List<Person> VAC
-        {
-            get
-            {
-                List<Person> copy = new List<Person>(m_VACList);
-                return copy;
-            }
-        }
-
-        public void addToVAC(Person person)
-        {
-            m_VACList.Add(person);
-        }
     }
 }

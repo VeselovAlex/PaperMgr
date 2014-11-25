@@ -9,11 +9,18 @@ namespace PaperMgr.Entity
     /// </summary>
     abstract class Paper
     {
+        protected Paper()
+        {
+            Title = "";
+            Label = Labels.LabelNames.None;
+            Reference = "";
+            Additional = "";
+        }
         const int MIN_PUBLICATION_YEAR = 1920;
 
         protected List<Person> m_authors = new List<Person>();
-        protected int m_year;
-        protected int m_pageCount;
+        protected int m_year = MIN_PUBLICATION_YEAR;
+        protected int m_pageCount = 0;
 
         public string Title { get; set; }
         public Labels.LabelNames Label { get; set; }
