@@ -1,90 +1,43 @@
-﻿using System;
+﻿using PaperMgr.Entity;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using PaperMgr.Entity;
-using System.Threading;
 
 namespace PaperMgr.FileWriters
 {
-    class TexBibliographyWriter
+    class TexBibliographyWriter : BibWriter
     {
-        protected TexBibliographyWriter()
+        public TexBibliographyWriter(string fileName)
+            : base(fileName)
         {
-            FileName = "file.tex";
+            FileReadyMsg = "TeX-файл готов";
         }
 
-        private sealed class TexBibliographyWriterFactory
-        {
-            private static readonly TexBibliographyWriter instance = new TexBibliographyWriter();
-            public static TexBibliographyWriter Instance { get { return instance; } }
-        }
+        protected StreamWriter output;
 
-        protected static object lockOn = new Object();
-
-        public static TexBibliographyWriter Instance
+        protected bool OutputIsOpen
         {
             get
             {
-                return TexBibliographyWriterFactory.Instance;
+                return output != null && output.BaseStream != null;
             }
         }
 
-        private StreamWriter output;
-        public string FileName { get; set; }
-
-        protected bool OutputIsOpen { get { return output != null && output.BaseStream != null; } }
-
-        protected void PrepareBibliographyTask(ICollection<Paper> papers)
+        protected override void PrepareBibliographyTask(ICollection<Paper> papers)
         {
-            lock (lockOn)
+            string curFileName = "";
+            curFileName = FileName;
+            using (output = OutputIsOpen ? output : new StreamWriter(curFileName))
             {
-                string curFileName = FileName;
-                using (output = OutputIsOpen ? output : new StreamWriter(curFileName))
+                output.WriteLine("\\begin{thebibliography}[" + papers.Count + ".]");
+                foreach (Paper paper in papers)
                 {
-                    output.WriteLine("\\begin{thebibliography}[" + papers.Count + ".]");
-                    foreach (Paper paper in papers)
-                    {
-                        Write(paper, false);
-                    }
-                    output.WriteLine("\n\\end{thebibliography}");
-                    output.Close();
+                    Write(paper, false);
                 }
-                OnPrepComplete(curFileName);
-                Monitor.PulseAll(lockOn);
-                Monitor.Wait(lockOn);
+                output.WriteLine("\n\\end{thebibliography}");
+                output.Close();
             }
-
-        }
-
-        protected static void OnPrepComplete(string filename)
-        {
-            DialogResult result = MessageBox.Show("Файл " + filename + " готов. Открыть?", "TeX-файл готов",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
-            if (result == DialogResult.Yes)
-                System.Diagnostics.Process.Start(filename);
-        }
-
-        public static void PrepareBibliography(string filename, ICollection<Paper> papers)
-        {
-            TexBibliographyWriter writer = TexBibliographyWriter.Instance;
-            writer.FileName = filename;
-            writer.PrepareBibliographyTask(papers);
-        }
-
-        public static Task PrepareBibliographyAsync(string filename, ICollection<Paper> papers)
-        {
-            TexBibliographyWriter writer = TexBibliographyWriter.Instance;
-            writer.FileName = filename;
-            return Task.Run(() => writer.PrepareBibliographyTask(papers));
-        }
-
-
-        public void Write(Paper paper)
-        {
-            Write(paper, true);
         }
 
         protected void Write(Paper paper, bool closeOnExit)
@@ -110,7 +63,7 @@ namespace PaperMgr.FileWriters
                 else if (paper is JournalArticle)
                 {
                     JournalArticle ppr = (JournalArticle)paper;
-                    output.WriteLine(" // " + ppr.JournalTitle + ". " + ppr.Year + ". \\No~" + ppr.JournalNumber +
+                    output.WriteLine(" // " + ppr.JournalTitle + ". " + ppr.Year + ". \\textnumero~" + ppr.JournalNumber +
                         ". С.~" + ppr.FirstPage + (ppr.LastPage.Equals("") ? "" : "--") + ppr.LastPage + ".");
                 }
             }
@@ -146,9 +99,12 @@ namespace PaperMgr.FileWriters
 
         private string concatAuthorsNames(List<Person> authors)
         {
+            if (authors == null || authors.Count == 0)
+                return "";
+            Person last = authors.Last<Person>();
             string result = "";
             foreach (Person author in authors)
-                result += author.GetName().Replace(' ', '~') + ", ";
+                result += author.GetName().Replace(' ', '~') + (last == author ? "" : ", ");
             return result;
         }
 

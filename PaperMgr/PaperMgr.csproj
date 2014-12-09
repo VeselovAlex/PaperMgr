@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\PaperMgr.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,12 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="BibWriter.cs" />
     <Compile Include="CompilationArticle.cs" />
     <Compile Include="Dissertation.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="IBibWriter.cs" />
     <Compile Include="JournalArticles.cs" />
     <Compile Include="JournalPaper.cs" />
     <Compile Include="Labels.cs" />
@@ -45,10 +45,14 @@
     <Compile Include="Paper.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="TexBibliographyWriter.cs" />
+    <Compile Include="WordListBibliographyWriter.cs" />
+    <Compile Include="WordTableBibliographyWriter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

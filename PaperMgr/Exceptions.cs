@@ -24,4 +24,16 @@ namespace PaperMgr.Exceptions
           System.Runtime.Serialization.StreamingContext context)
             : base(info, context) { }
     }
+
+    [Serializable]
+    public class AuthorMismatchException : Exception
+    {
+        public AuthorMismatchException() { }
+        public AuthorMismatchException(string message) : base(message) { }
+        public AuthorMismatchException(string message, Exception inner) : base(message, inner) { }
+        protected AuthorMismatchException(
+          System.Runtime.Serialization.SerializationInfo info,
+          System.Runtime.Serialization.StreamingContext context)
+            : base(info, context) { }
+    }
 }
