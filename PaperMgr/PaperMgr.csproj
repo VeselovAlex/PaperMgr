@@ -36,6 +36,7 @@
     <Compile Include="BibWriter.cs" />
     <Compile Include="CompilationArticle.cs" />
     <Compile Include="Dissertation.cs" />
+    <Compile Include="ExcelBibliorgraphyWriter.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="IBibWriter.cs" />
     <Compile Include="JournalArticles.cs" />

@@ -7,24 +7,6 @@ namespace PaperMgr
 {
     class MainClass
     {
-        private static async Task runAsync(string filename, ICollection<Paper> papers)
-        {
-            IBibWriter writer = new TexBibliographyWriter(filename + ".tex");
-            IBibWriter writer2 = new WordListBibliographyWriter(filename + ".docx");
-            var t =  writer.PrepareBibliographyAsync(papers);
-            var t2 = writer2.PrepareBibliographyAsync(papers);
-            await t;
-            await t2;
-        }
-
-        private static void runSync(string filename, ICollection<Paper> papers)
-        {
-            IBibWriter writer = new TexBibliographyWriter(filename + ".tex");
-            IBibWriter writer2 = new WordListBibliographyWriter(filename + ".docx");
-            writer.PrepareBibliography(papers);
-            writer2.PrepareBibliography(papers);
-        }
-
         public static void Main()
         {
 
@@ -58,10 +40,13 @@ namespace PaperMgr
             }
 
             try
-            { /*Task t = runAsync("fullTest", testSet);
-                t.Wait();*/
-                (new WordTableBibliographyWriter("testfiles/testTable.docx", new Person("Ivan", "Ivanovich", "Ivanov"))).PrepareBibliography(testSet);
-                (new WordListBibliographyWriter("testfiles/testList.docx")).PrepareBibliography(testSet);
+            { 
+                var tex = new TexBibliographyWriter("testfiles/testBib.tex").PrepareBibliographyAsync(testSet);
+                var word = new WordListBibliographyWriter("testfiles/testList.docx").PrepareBibliographyAsync(testSet);
+                var excel = new ExcelBibliographyWriter("testfiles/testSheet.xlsx").PrepareBibliographyAsync(testSet);
+                tex.Wait();
+                word.Wait();
+                excel.Wait();
             }
             catch (System.Exception exc)
             {
