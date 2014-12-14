@@ -30,7 +30,7 @@ namespace PaperMgr
             disser.Year = 2010;
             disser.PageCount = 100;
             disser.Degree = "Проф.";
-            disser.Publisher = "СПбГУ";
+            disser.Publisher = "«Вега-Инфо";
 
             List<Paper> testSet = new List<Paper>();
             for (int i = 0; i < 10; i++)
@@ -41,9 +41,9 @@ namespace PaperMgr
 
             try
             { 
-                var tex = new TexBibliographyWriter("testfiles/testBib.tex").PrepareBibliographyAsync(testSet);
-                var word = new WordListBibliographyWriter("testfiles/testList.docx").PrepareBibliographyAsync(testSet);
-                var excel = new ExcelBibliographyWriter("testfiles/testSheet.xlsx").PrepareBibliographyAsync(testSet);
+                var tex = new TexBibliographyWriter("C:/testfiles/testBib.tex").PrepareBibliographyAsync(testSet);
+                var word = new WordListBibliographyWriter("C:/testfiles/testList.docx").PrepareBibliographyAsync(testSet);
+                var excel = new ExcelBibliographyWriter("C:/testfiles/testSheet.xlsx").PrepareBibliographyAsync(testSet);
                 tex.Wait();
                 word.Wait();
                 excel.Wait();
